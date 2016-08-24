@@ -1,0 +1,30 @@
+server:
+  port: 9393
+  
+logging:
+  level:
+     org:
+       springframework:
+         security: DEBUG
+         
+         
+#spring:
+#  profiles:
+#    active: true
+#         
+#         eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/
+#      
+      
+      
+#      server:
+#  port: ${PORT:9393}
+
+#eureka:
+#  client:
+#    registerWithEureka: false
+#    fetchRegistry: false
+#    server:
+#      waitTimeInMsWhenSyncEmpty: 0

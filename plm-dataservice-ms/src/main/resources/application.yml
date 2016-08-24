@@ -1,0 +1,8 @@
+server:
+  port: 9191
+  
+logging:
+  level:
+     org:
+       springframework:
+         security: DEBUG

@@ -1,0 +1,15 @@
+server:
+  port: 8989
+  
+logging:
+  level:
+     org:
+       springframework:
+         security: DEBUG
+         spring:
+  application:
+    name: plm-subscriber-ms
+  cloud:
+    config:
+      uri: http://localhost:8888
+         

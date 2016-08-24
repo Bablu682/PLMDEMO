@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: eureka-server
+  cloud:
+    config:
+      uri: http://localhost:8888
+eureka:
+  client:
+    register-with-eureka: false
+    
+    
+    eureka-service-url-poll-interval-seconds: 500000
+    enabled: true
+    proxy-user-name: cprajaba
+    fetch-registry: true
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+  file: C:/Apigee/work/logs/eureka-server.log
