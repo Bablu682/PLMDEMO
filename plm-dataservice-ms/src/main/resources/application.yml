@@ -1,8 +1,13 @@
 server:
   port: 9191
   
+debug: true
+
+  
+
 logging:
   level:
-     org:
-       springframework:
-         security: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: info
+    
+  file: C:/Apigee/micro-services/Work/Azure/logs/dataservice/plm-dataservice-ms.log

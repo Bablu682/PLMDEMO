@@ -3,7 +3,7 @@
      config:
        server:
          git:
-          uri: https://github.com/adnapster/yml 
+          uri: file://C:/Users/cprajaba/Desktop/Apigee/work/controls-plm-config
           
           
 # #cloud:

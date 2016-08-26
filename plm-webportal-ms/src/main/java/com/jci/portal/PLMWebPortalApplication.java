@@ -16,6 +16,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -47,6 +49,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 @RestController
 public class PLMWebPortalApplication {
 
+	private static final Logger LOG = LoggerFactory.getLogger(PLMWebPortalApplication.class);
 
 	@Autowired
 	PLMWebportalService ui;
@@ -78,7 +81,8 @@ public class PLMWebPortalApplication {
 	@RequestMapping(value = "/ErrorTriggered", method = { RequestMethod.GET })
 	public String reprocessRequest() throws Exception {
 		String ecnNo;
-		System.out.println("Webmicroservice controller ");
+		
+		LOG.info("Web Portal Microservice Controller Start Executing");
 		// here implemented temporary XML from local
 		// here we need to take a XML from azure storage to re-process
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -89,14 +93,19 @@ public class PLMWebPortalApplication {
 		serializer.transform(new DOMSource(doc), new StreamResult(stw));
 		// here implementing temporary Hard coded enNo
 		ecnNo = "1234";
+		LOG.info("ECN No is   "+ecnNo);
+		LOG.info("Xml file in WEB PORTAL MS");
+		LOG.info("=========================================================");
+		LOG.info(stw.toString());
 
 		ui.reprocessRequest(ecnNo, stw.toString());
-		return "ecn-nu";
+		
+		return "Reproccesing request send succesfully";
 	}
 
 	@RequestMapping(value ="fallBack")
 	public String hystrixCircuitBreaker() {
-
+		LOG.info("Web Portal MS FALLBACK() Called");
 		String value = ui.hystrixCircuitBreaker();
 		return "Circuit Breaker success in WebPortal Microservice";
 	}

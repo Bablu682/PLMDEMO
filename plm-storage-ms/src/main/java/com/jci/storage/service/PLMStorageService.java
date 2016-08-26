@@ -9,4 +9,6 @@ public interface PLMStorageService {
 //	String PutJsonBom(String json);  //json from bom
 
 	String hystrixCircuitBreaker();
+	
+	public String setEntity() ;
 }

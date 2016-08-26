@@ -6,4 +6,4 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
-  file: C:/Apigee/work/logs/config-server.log
+  file: C:/Apigee/micro-services/Work/Azure/logs/config/plm-config.log

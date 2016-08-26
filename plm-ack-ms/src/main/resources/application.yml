@@ -1,3 +1,13 @@
 server:
   port: 9494
   
+debug: true
+
+  
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: info
+    
+  file: C:/Apigee/micro-services/Work/Azure/logs/ack/plm-ack-ms.log

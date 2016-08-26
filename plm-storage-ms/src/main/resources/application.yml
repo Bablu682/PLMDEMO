@@ -1,11 +1,28 @@
 server:
   port: 9393
   
+#logging:
+#  level:
+#     org:
+#       springframework:
+#         security: DEBUG
+#         
+         
+         
+         
+         
+         
+         
+debug: true
+
+  
+
 logging:
   level:
-     org:
-       springframework:
-         security: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: info
+    
+  file: C:/Apigee/micro-services/Work/Azure/logs/storage/plm-storage-ms.log
          
          
 #spring:

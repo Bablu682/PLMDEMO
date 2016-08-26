@@ -4,9 +4,16 @@ server:
 
 debug: true
 
+  
+
 logging:
   level:
     org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-  file: C:/Apigee/micro-services/Work/Azure/pologs/plm-webportal-ms.log
+    org.springframework.web: info
+    
+  file: C:/Apigee/micro-services/Work/Azure/logs/webportal/plm-webportal-ms.log
+  
+  
+  
+ 
   #${HOME}\site\wwwroot\pologs\web-portal.log

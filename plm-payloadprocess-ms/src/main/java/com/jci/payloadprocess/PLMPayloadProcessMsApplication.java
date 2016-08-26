@@ -1,10 +1,13 @@
 package com.jci.payloadprocess;
 
 import java.util.HashMap;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -37,7 +40,10 @@ import com.jci.payloadprocess.service.PLMProcessPayloadService;
 @EnableEurekaClient
 public class PLMPayloadProcessMsApplication {
 
+	private static final Logger LOG = LoggerFactory.getLogger(PLMPayloadProcessMsApplication.class);
+	
 	public static void main(String[] args) {
+		
 		SpringApplication.run(PLMPayloadProcessMsApplication.class, args);
 	}
 	@Autowired
@@ -69,9 +75,14 @@ public class PLMPayloadProcessMsApplication {
 		    
 			public  String  processPayload(@RequestBody String xmlPayload, HttpServletRequest request) 
 			{
+				LOG.info("Payload Process MS Controller is Executing");
+				
 				String xml = request.getParameter("xml");
-				System.out.println(xml);
 				String ecnNo="1234";
+				LOG.info("EcnNo is "+ecnNo);
+				LOG.info("XML At Payload Process MS");
+				LOG.info("========================================");
+				LOG.info(xml);
 				try
 				{
 					process.processPayload(xml, ecnNo);
@@ -92,9 +103,13 @@ public class PLMPayloadProcessMsApplication {
 		try
 			{
 			
-				System.out.println("Reprocessing call");
+				LOG.info("Payload Process MS Controller is Executing");
 				String completeXml=hashMap.get("completeXml");
 				String ecnNo=hashMap.get("ecnNo");
+				LOG.info("EcnNo is "+ecnNo);
+				LOG.info("XML At Payload Process MS");
+				LOG.info("========================================");
+				LOG.info(completeXml);
 				
 				
 				process.processPayload(completeXml, ecnNo);

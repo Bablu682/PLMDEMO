@@ -2,10 +2,10 @@ spring:
   profiles: development
 server:
   port: 8765
-#  compression:
-#    enabled: true
-#    min-response-size: 1024
-#    mime-types: application/xml,application/json
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types: application/xml,application/json
 zuul:
   routes:
     plm-part-bom-ms: /api/part-bom/**
@@ -17,24 +17,24 @@ zuul:
     plm-subscriber-ms: /api/storage/**
     plm-ack-ms: /api/ack/**
   host:
-    connect-timeout-millis: 10000000
-    socket-timeout-millis: 60000000
+    connect-timeout-millis: 1000000000
+    socket-timeout-millis: 6000000000
 hystrix:
   command.default.execution.isolation.strategy: THREAD
-  command.default.execution.isolation.thread.timeoutInMilliseconds: 6000000
-  command.default.execution.timeout.enabled: false
-  command.default.fallback.enabled: false
+  command.default.execution.isolation.thread.timeoutInMilliseconds: 600000000000
+  command.default.execution.timeout.enabled: true
+  command.default.fallback.enabled: true
   threadpool.default.coreSize: 20
 plm-part-bom-ms:
   ribbon:
-    ReadTimeout: 6000000
-    ConnectTimeout: 600000
+    ReadTimeout: 600000000
+    ConnectTimeout: 60000000
 plm-payloadprocess-ms:
   ribbon:
-    ReadTimeout: 6000000
-    ConnectTimeout: 6000000
+    ReadTimeout: 600000000
+    ConnectTimeout: 600000000
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    registry-fetch-interval-seconds: 20
+    registry-fetch-interval-seconds: 200

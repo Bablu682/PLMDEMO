@@ -1,8 +1,20 @@
 server:
   port: 9090
+
+
+
+
+
+debug: true
+
   
+
 logging:
   level:
-     org:
-       springframework:
-         security: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: info
+    
+  file: C:/Apigee/micro-services/Work/Azure/logs/partbom/plm-part-bom-ms.log
+  
+  
+  

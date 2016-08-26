@@ -1,8 +1,15 @@
 package com.jci.partbom;
 
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
+
 import java.util.List;
 
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,18 +35,14 @@ import com.jci.partbom.service.PLMPartBomService;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableEurekaClient
-@EnableFeignClients
 @RestController
 @EnableHystrix
 @EnableHystrixDashboard
 @EnableCircuitBreaker
 
 public class PLMPartBomApplication {
-	public static void main(String[] args) {
-
-		SpringApplication.run(PLMPartBomApplication.class, args);
-
-	}
+	
+	private static final Logger LOG = LoggerFactory.getLogger(PLMPartBomApplication.class);	
 	
 	
 	@Autowired
@@ -84,15 +87,42 @@ public class PLMPartBomApplication {
 
 	@RequestMapping(value = "/receiveJson", method = { RequestMethod.POST })
 	public String jsonRecieveAndSend(@RequestBody HashMap<String, Object> jsonXml) throws Exception {
+		LOG.info("Part-Bom Ms Controller is Executing");
 
 		System.out.println("Data reach at Bom ms from subcriber ms");
 		System.out.println("===================PART=======================");
 		System.out.println(jsonXml.get("part"));
-		System.out.println("===================BOM=======================");
+		System.out.println("===================BOM========================");
 		System.out.println(jsonXml.get("bom"));
 		System.out.println("===================JSON=======================");
 		System.out.println(jsonXml.get("json"));
-
+		
+		LOG.info("JSON Received at PART-BOM MS");
+		LOG.info("=========================================================");
+		LOG.info("PART JSON"+jsonXml.get("part"));
+		
+		LOG.info("=========================================================");
+		LOG.info("BOM JSON"+jsonXml.get("bom"));
+		
+		LOG.info("=========================================================");
+		LOG.info("INFO JSON"+jsonXml.get("json"));
+		
+		
+		JSONParser parser = new JSONParser();
+		URL git = new URL("http://apidev1.jci.com:9055/jcibe/v1/suppliercollaboration/purchaseorders?erpname=SYMIX&region=ASIA&plant=RY1&ordernumber=**&ordercreationdate=**");
+		Object obj=parser.parse(new InputStreamReader(git.openStream()));
+		 JSONObject jsonObj = new JSONObject(obj.toString());
+		System.out.println(jsonObj.get("code"));
+		System.out.println(jsonObj.get("status"));
+		System.out.println(jsonObj.get("message"));
+		System.out.println(jsonObj.get("date")); 
+		
+		jsonXml.put("code", jsonObj.get("code"));
+		jsonXml.put("status", jsonObj.get("status"));
+		jsonXml.put("message", jsonObj.get("message"));
+		jsonXml.put("date", jsonObj.get("date"));
+		
+//		 partbomservice.partApiCallInApigee();
 		 partbomservice.jsonSendToStorage(jsonXml);
 
 		return " Successs fully send data to Storage Ms ";
@@ -109,4 +139,9 @@ public class PLMPartBomApplication {
 	
 	
 	
+	public static void main(String[] args) {
+		
+		SpringApplication.run(PLMPartBomApplication.class, args);
+		
+	}
 }

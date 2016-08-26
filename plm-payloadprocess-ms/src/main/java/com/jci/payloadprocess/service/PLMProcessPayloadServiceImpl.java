@@ -22,6 +22,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -32,13 +34,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jci.payloadprocess.PLMPayloadProcessMsApplication;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import net.minidev.json.parser.JSONParser;
 
 @Service
 public class PLMProcessPayloadServiceImpl implements PLMProcessPayloadService{
-	  
+	
+	private static final Logger LOG = LoggerFactory.getLogger(PLMPayloadProcessMsApplication.class);
+	
 	@Autowired
 	RestTemplate resttemplate;
 	
@@ -63,6 +68,7 @@ public class PLMProcessPayloadServiceImpl implements PLMProcessPayloadService{
 	@Override
 	public String processPayload(String completeXml,String ecnNo)
 	{
+		LOG.info("PAyload Process MS Service is Executing");
 		try
 		{
 			if(ecnNo!=null)
@@ -74,8 +80,6 @@ public class PLMProcessPayloadServiceImpl implements PLMProcessPayloadService{
 				reprocess=0;
 			}
 			
-			System.out.println("processpayload() is executed . . . . . . .");
-			System.out.println("value of ecnNo is    " + ecnNo);
 		File file = new File("Payload.xml");
 		if (!file.exists()) {
 			file.createNewFile();
@@ -132,13 +136,21 @@ public class PLMProcessPayloadServiceImpl implements PLMProcessPayloadService{
 		serializer.transform(new DOMSource(xsltdoc), new StreamResult(xsltXML));
 		serializer.transform(new DOMSource(payloaddoc), new StreamResult(payloadXML));
 		
+		LOG.info("XSLT XMl is Created in Payload Process MS");
+		LOG.info("=========================================================");
+		LOG.info(xsltXML.toString());
 		
 		//here we will add ERP PLANT REGION
 		JSONObject infoJson = new JSONObject();
 		infoJson.put("erp", erp);
 		infoJson.put("plant", plant);
 		infoJson.put("region", region);
+		
+		LOG.info("infoJson at Payload Process MS");
+		LOG.info("===========================================================");
+		LOG.info(infoJson.toString());
 	
+		LOG.info("OLD Xml is Sending to Storage MS");
 		//sending XML to Storage ms
 		List<ServiceInstance> serviceInstance = discoveryClient.getInstances("plm-storage-ms");
 		ServiceInstance bomInstance = serviceInstance.get(0);
@@ -146,7 +158,8 @@ public class PLMProcessPayloadServiceImpl implements PLMProcessPayloadService{
 		+ "/receiveXml";
 		 	HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		 	hashMap.put("xml", payloadXML.toString());
-	        
+	       
+		 	System.out.println("=================flow============================");
 		
         Map result = restTemplate.postForObject( urlString,hashMap , Map.class);
 	
@@ -162,7 +175,21 @@ public class PLMProcessPayloadServiceImpl implements PLMProcessPayloadService{
         mvm.put("json", infoJson.toString());
         mvm.put("bom", collectionPayload.get("BOMCOMPONENTS-BOMCOMPONENTS").toString()); 
         mvm.put("part", collectionPayload.get("PARTS-PARTS").toString());
+        mvm.put("erp", erp);
+        mvm.put("region", region);
+        mvm.put("plant", plant);
+        
         result = restTemplate.postForObject( urlString1, mvm , Map.class);
+        
+        LOG.info("Part JSON is created at Payload Process MS");
+        LOG.info("====================================================================");
+        LOG.info(mvm.get("part").toString());
+        
+        LOG.info("BOM JSON is created at Payload Process MS");
+        LOG.info("====================================================================");
+        LOG.info(mvm.get("bom").toString());
+       
+        LOG.info("PART-BOM Json is Sending to PART-BOM MS");
 		}
 		catch(Exception e){
 			e.printStackTrace();

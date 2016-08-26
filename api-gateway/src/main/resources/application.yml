@@ -1,5 +1,4 @@
-#spring.application.name=api-gateway
-#server.port=8765
+
 
 
 spring:
@@ -7,3 +6,15 @@ spring:
     name: api-gateway
 server:
   port: 8765
+  
+    
+debug: true
+
+  
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: info
+    
+  file: C:/Apigee/micro-services/Work/Azure/logs/api-gateway/plm-api-gateway-ms.log
